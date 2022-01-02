@@ -368,11 +368,10 @@ def main():
         global home_heroes
         home_heroes = loadHeroesToSendHome()
     else:
-        print('>>---> Home feature not enabled')
+        print(cat)
     print('\n')
 
-    print(cat)
-    time.sleep(7)
+    time.sleep(2)
     t = c['time_intervals']
 
     last = {

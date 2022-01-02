@@ -11,7 +11,6 @@ import time
 import sys
 import yaml
 
-# Load config file.
 stream = open("config.yaml", 'r')
 c = yaml.safe_load(stream)
 ct = c['threshold']
@@ -22,30 +21,25 @@ pyautogui.PAUSE = pause
 cat = """>>---> Press ctrl + c to kill the bot."""
 
 def addRandomness(n, randomn_factor_size=None):
-
     if randomn_factor_size is None:
         randomness_percentage = 0.1
         randomn_factor_size = randomness_percentage * n
-
     random_factor = 2 * random() * randomn_factor_size
     if random_factor > 5:
         random_factor = 5
     without_average_random_factor = n - randomn_factor_size
     randomized_n = int(without_average_random_factor + random_factor)
-    # logger('{} with randomness -> {}'.format(int(n), randomized_n))
     return int(randomized_n)
 
 def moveToWithRandomness(x,y,t):
     pyautogui.moveTo(addRandomness(x,10),addRandomness(y,10),t+random()/2)
 
 def remove_suffix(input_string, suffix):
-
     if suffix and input_string.endswith(suffix):
         return input_string[:-len(suffix)]
     return input_string
 
 def load_images(dir_path='./targets/'):
-
     file_names = listdir(dir_path)
     targets = {}
     for file in file_names:
@@ -61,7 +55,7 @@ def loadHeroesToSendHome():
         path = './targets/heroes-to-send-home/' + file
         heroes.append(cv2.imread(path))
 
-    print('>>---> %d heroes that should be sent home loaded' % len(heroes))
+    print('>>---> %d heróis que devem ser enviados para casa carregados' % len(heroes))
     return heroes
 
 def show(rectangles, img = None):
@@ -111,9 +105,7 @@ def positions(target, threshold=ct['default'],img = None):
     result = cv2.matchTemplate(img,target,cv2.TM_CCOEFF_NORMED)
     w = target.shape[1]
     h = target.shape[0]
-
     yloc, xloc = np.where(result >= threshold)
-
     rectangles = []
     for (x, y) in zip(xloc, yloc):
         rectangles.append([int(x), int(y), int(w), int(h)])
@@ -123,14 +115,11 @@ def positions(target, threshold=ct['default'],img = None):
     return rectangles
 
 def scroll():
-
     commoms = positions(images['commom-text'], threshold = ct['commom'])
     if (len(commoms) == 0):
         return
     x,y,w,h = commoms[len(commoms)-1]
-
     moveToWithRandomness(x,y,1)
-
     if not c['use_click_and_drag_instead_of_scroll']:
         pyautogui.scroll(-c['scroll_size'])
     else:
@@ -138,7 +127,6 @@ def scroll():
 
 def clickButtons():
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
-
     for (x, y, w, h) in buttons:
         moveToWithRandomness(x+(w/2),y+(h/2),1)
         pyautogui.click()
@@ -146,13 +134,12 @@ def clickButtons():
         hero_clicks = hero_clicks + 1
 
         if hero_clicks > 20:
-            logger('too many hero clicks, try to increase the go_to_work_btn threshold')
+            logger('muitos cliques de herói, tente aumentar go_to_work_btn limiar')
             return
     return len(buttons)
 
 def isHome(hero, buttons):
     y = hero[1]
-
     for (_,button_y,_,button_h) in buttons:
         isBelow = y < (button_y + button_h)
         isAbove = y > (button_y - button_h)
@@ -163,7 +150,6 @@ def isHome(hero, buttons):
 
 def isWorking(bar, buttons):
     y = bar[1]
-
     for (_,button_y,_,button_h) in buttons:
         isBelow = y < (button_y + button_h)
         isAbove = y > (button_y - button_h)
@@ -176,28 +162,27 @@ def clickGreenBarButtons():
     offset = 140
 
     green_bars = positions(images['green-bar'], threshold=ct['green_bar'])
-    logger('🟩 %d green bars detected' % len(green_bars))
+    logger('👽👽 %d barras verdes detectadas' % len(green_bars))
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
-    logger('🆗 %d buttons detected' % len(buttons))
+    logger('🔍✔ %d botões detectados' % len(buttons))
 
     not_working_green_bars = []
     for bar in green_bars:
         if not isWorking(bar, buttons):
             not_working_green_bars.append(bar)
     if len(not_working_green_bars) > 0:
-        logger('🆗 %d buttons with green bar detected' % len(not_working_green_bars))
-        logger('👆 Clicking in %d heroes' % len(not_working_green_bars))
+        logger('🔍✔ %d botões com barra verde detectados' % len(not_working_green_bars))
+        logger('👆🏻👆🏻 Clicando em %d heróis' % len(not_working_green_bars))
 
     hero_clicks_cnt = 0
     for (x, y, w, h) in not_working_green_bars:
-
         moveToWithRandomness(x+offset+(w/2),y+(h/2),1)
         pyautogui.click()
         global hero_clicks
         hero_clicks = hero_clicks + 1
         hero_clicks_cnt = hero_clicks_cnt + 1
         if hero_clicks_cnt > 20:
-            logger('⚠️ Too many hero clicks, try to increase the go_to_work_btn threshold')
+            logger('⚠️ Muitos cliques de herói, tente aumentar o go_to_work_btn limiar')
             return
 
     return len(not_working_green_bars)
@@ -206,15 +191,12 @@ def clickFullBarButtons():
     offset = 100
     full_bars = positions(images['full-stamina'], threshold=ct['default'])
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
-
     not_working_full_bars = []
     for bar in full_bars:
         if not isWorking(bar, buttons):
             not_working_full_bars.append(bar)
-
     if len(not_working_full_bars) > 0:
-        logger('👆 Clicking in %d heroes' % len(not_working_full_bars))
-
+        logger('🤩🤩 Clicando em %d herois' % len(not_working_full_bars))
     for (x, y, w, h) in not_working_full_bars:
         moveToWithRandomness(x+offset+(w/2),y+(h/2),1)
         pyautogui.click()
@@ -227,45 +209,37 @@ def goToHeroes():
     if clickBtn(images['go-back-arrow']):
         global login_attempts
         login_attempts = 0
-
     time.sleep(1)
     clickBtn(images['hero-icon'])
     time.sleep(randint(1,3))
 
 def goToGame():
-
     clickBtn(images['x'])
-
     clickBtn(images['x'])
-
     clickBtn(images['treasure-hunt-icon'])
 
 def refreshHeroesPositions():
-
-    logger('🔃 Refreshing Heroes Positions')
+    logger('⏱ Refrescando as posições dos heróis')
     clickBtn(images['go-back-arrow'])
     clickBtn(images['treasure-hunt-icon'])
     clickBtn(images['treasure-hunt-icon'])
 
 def login():
     global login_attempts
-    logger('😿 Checking if game has disconnected')
+    logger('⏳⌛⏳ Verificando se o jogo foi desconectado')
 
     if login_attempts > 3:
-        logger('🔃 Too many login attempts, refreshing')
+        logger('😣😣 Muitas tentativas de login, atualizando')
         login_attempts = 0
         pyautogui.hotkey('ctrl','f5')
         return
 
     if clickBtn(images['connect-wallet'], timeout = 10):
-        logger('🎉 Connect wallet button detected, logging in!')
+        logger('🥱🥱😪 Botão de conexão da carteira detectado, entrando!')
         login_attempts = login_attempts + 1
-
 
     if clickBtn(images['select-wallet-2'], timeout=8):
-
         login_attempts = login_attempts + 1
-
         if clickBtn(images['treasure-hunt-icon'], timeout = 15):
             login_attempts = 0
         return
@@ -278,9 +252,7 @@ def login():
 
     if clickBtn(images['select-wallet-2'], timeout = 20):
         login_attempts = login_attempts + 1
-
         if clickBtn(images['treasure-hunt-icon'], timeout=25):
-
             login_attempts = 0
 
     if clickBtn(images['ok'], timeout=5):
@@ -293,43 +265,40 @@ def sendHeroesHome():
     for hero in home_heroes:
         hero_positions = positions(hero, threshold=ch['hero_threshold'])
         if not len (hero_positions) == 0:
-
             hero_position = hero_positions[0]
             heroes_positions.append(hero_position)
-
     n = len(heroes_positions)
     if n == 0:
-        print('No heroes that should be sent home found.')
+        print('Nenhum herói que deveria ser enviado para casa foi encontrado.')
         return
-    print(' %d heroes that should be sent home found' % n)
+    print(' %d heróis que deveriam ser enviados para casa encontrados' % n)
 
     go_home_buttons = positions(images['send-home'], threshold=ch['home_button_threshold'])
-
     go_work_buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
 
     for position in heroes_positions:
         if not isHome(position,go_home_buttons):
             print(isWorking(position, go_work_buttons))
             if(not isWorking(position, go_work_buttons)):
-                print ('hero not working, sending him home')
+                print ('herói não funciona, mandando-o para casa')
                 moveToWithRandomness(go_home_buttons[0][0]+go_home_buttons[0][2]/2,position[1]+position[3]/2,1)
                 pyautogui.click()
             else:
-                print ('hero working, not sending him home(no dark work button)')
+                print ('herói trabalhando, não o enviando para casa (sem botão de trabalho escuro)')
         else:
-            print('hero already home, or home full(no dark home button)')
+            print('herói já em casa ou casa cheia (sem botão home escuro)')
 
 def refreshHeroes():
-    logger('🏢 Search for heroes to work')
+    logger('🔍🔍 Procure por heróis para trabalhar')
 
     goToHeroes()
 
     if c['select_heroes_mode'] == "full":
-        logger('⚒️ Sending heroes with full stamina bar to work', 'green')
+        logger('😎😎 Enviando heróis com barra de resistência completa para o trabalho', 'green')
     elif c['select_heroes_mode'] == "green":
-        logger('⚒️ Sending heroes with green stamina bar to work', 'green')
+        logger('😎😎 Enviando heróis com barra de resistência verde para o trabalho', 'green')
     else:
-        logger('⚒️ Sending all heroes to work', 'green')
+        logger('😎😎 Enviando todos os heróis para o trabalho', 'green')
 
     buttonsClicked = 1
     empty_scrolls_attempts = c['scroll_attemps']
@@ -348,7 +317,7 @@ def refreshHeroes():
             empty_scrolls_attempts = empty_scrolls_attempts - 1
         scroll()
         time.sleep(2)
-    logger('💪 {} heroes sent to work'.format(hero_clicks))
+    logger('✨🐱‍🏍🐱‍🏍✨ {} heróis enviados para o trabalho'.format(hero_clicks))
     goToGame()
 
 def main():

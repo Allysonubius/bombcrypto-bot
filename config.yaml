@@ -20,32 +20,34 @@
     refresh_heroes_positions: 2
     
     # [en_US] Time interval to check for new maps
-    # Default value (in minutes): 5
+    # Default value (in minutes): 2
     #
     # [pt_BR] Intervalo de tempo para verificar por novos mapas
-    # Valor padrão (em segundos): 5
-    check_for_new_map_button: 5
+    # Valor padrão (em segundos): 2
+    check_for_new_map_button: 2
+
+    
     
     # [en_US] Time interval to check for captcha.
-    # Default value (in minutes): 1
+    # Default value (in minutes): 0.5
     #
     # [pt_BR] Intervalo de tempo para verificar se precisa resolver o captcha.
-    # Valor padrão (em minutos): 1
-    check_for_captcha: 1
+    # Valor padrão (em minutos): 0.5
+    check_for_captcha: 0.5
 
     # [en_US] Time interval to check for login request
-    # Default value (in minutes): 3
+    # Default value (in minutes): 0.1
     #
     # [pt_BR] Intervalo de tempo para verificar se existe solicitação de login
-    # Valor padrão (em minutos): 5
-    check_for_login: 0.2
+    # Valor padrão (em minutos): 0.1
+    check_for_login: 0.1
 
     # [en_US] Time interval between moviments
-    # Default value (in seconds): 0.5
+    # Default value (in seconds): 0.1
     #
     # [pt_BR] Intervalo de tempo entre movimentos
-    # Valor padrão (em segundos): 0.5
-    interval_between_moviments: 0.5
+    # Valor padrão (em segundos): 0.1
+    interval_between_moviments: 0.1
 
   # [en_US] How confident the bot needs to be to click the buttons (values from 0 to 1. 0 is the minimum value, 1 is the maximum value)
   #
@@ -107,7 +109,7 @@
   #
   # [pt_BR]
   # Valor padrão: 3
-  scroll_attemps: 3
+  scroll_attemps: 2
 
   # [en_US]
   # Default value: true

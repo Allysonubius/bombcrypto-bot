@@ -19,11 +19,7 @@ ch = c['home']
 pause = c['time_intervals']['interval_between_moviments']
 pyautogui.PAUSE = pause
 
-cat = """
-
->>---> Press ctrl + c to kill the bot.
-
->>---> Some configs can be found in the config.yaml file."""
+cat = """>>---> Press ctrl + c to kill the bot."""
 
 def addRandomness(n, randomn_factor_size=None):
 
@@ -42,7 +38,6 @@ def addRandomness(n, randomn_factor_size=None):
 def moveToWithRandomness(x,y,t):
     pyautogui.moveTo(addRandomness(x,10),addRandomness(y,10),t+random()/2)
 
-
 def remove_suffix(input_string, suffix):
 
     if suffix and input_string.endswith(suffix):
@@ -59,7 +54,6 @@ def load_images(dir_path='./targets/'):
 
     return targets
 
-
 def loadHeroesToSendHome():
     file_names = listdir('./targets/heroes-to-send-home')
     heroes = []
@@ -69,10 +63,6 @@ def loadHeroesToSendHome():
 
     print('>>---> %d heroes that should be sent home loaded' % len(heroes))
     return heroes
-
-
-
-
 
 def show(rectangles, img = None):
 
@@ -84,13 +74,8 @@ def show(rectangles, img = None):
     for (x, y, w, h) in rectangles:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,255,255), 2)
 
-    # cv2.rectangle(img, (result[0], result[1]), (result[0] + result[2], result[1] + result[3]), (255,50,255), 2)
     cv2.imshow('img',img)
     cv2.waitKey(0)
-
-
-
-
 
 def clickBtn(img, timeout=3, threshold = ct['default']):
 
@@ -129,7 +114,6 @@ def positions(target, threshold=ct['default'],img = None):
 
     yloc, xloc = np.where(result >= threshold)
 
-
     rectangles = []
     for (x, y) in zip(xloc, yloc):
         rectangles.append([int(x), int(y), int(w), int(h)])
@@ -144,14 +128,13 @@ def scroll():
     if (len(commoms) == 0):
         return
     x,y,w,h = commoms[len(commoms)-1]
-#
+
     moveToWithRandomness(x,y,1)
 
     if not c['use_click_and_drag_instead_of_scroll']:
         pyautogui.scroll(-c['scroll_size'])
     else:
         pyautogui.dragRel(0,-c['click_and_drag_amount'],duration=1, button='left')
-
 
 def clickButtons():
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
@@ -197,7 +180,6 @@ def clickGreenBarButtons():
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
     logger('🆗 %d buttons detected' % len(buttons))
 
-
     not_working_green_bars = []
     for bar in green_bars:
         if not isWorking(bar, buttons):
@@ -205,7 +187,6 @@ def clickGreenBarButtons():
     if len(not_working_green_bars) > 0:
         logger('🆗 %d buttons with green bar detected' % len(not_working_green_bars))
         logger('👆 Clicking in %d heroes' % len(not_working_green_bars))
-
 
     hero_clicks_cnt = 0
     for (x, y, w, h) in not_working_green_bars:
@@ -247,7 +228,6 @@ def goToHeroes():
         global login_attempts
         login_attempts = 0
 
-    #TODO tirar o sleep quando colocar o pulling
     time.sleep(1)
     clickBtn(images['hero-icon'])
     time.sleep(randint(1,3))
@@ -265,8 +245,6 @@ def refreshHeroesPositions():
     logger('🔃 Refreshing Heroes Positions')
     clickBtn(images['go-back-arrow'])
     clickBtn(images['treasure-hunt-icon'])
-
-
     clickBtn(images['treasure-hunt-icon'])
 
 def login():
@@ -289,14 +267,12 @@ def login():
         login_attempts = login_attempts + 1
 
         if clickBtn(images['treasure-hunt-icon'], timeout = 15):
-
             login_attempts = 0
         return
 
     if not clickBtn(images['select-wallet-1-no-hover'], ):
         if clickBtn(images['select-wallet-1-hover'], threshold = ct['select_wallet_buttons'] ):
             pass
-
     else:
         pass
 
@@ -375,7 +351,6 @@ def refreshHeroes():
     logger('💪 {} heroes sent to work'.format(hero_clicks))
     goToGame()
 
-
 def main():
     """Main execution setup and loop"""
 
@@ -429,7 +404,6 @@ def main():
             if clickBtn(images['new-map']):
                 loggerMapClicked()
 
-
         if now - last["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
             last["refresh_heroes"] = now
             refreshHeroesPositions()
@@ -443,6 +417,3 @@ def main():
 if __name__ == '__main__':
 
     main()
-
-
-

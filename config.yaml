@@ -13,11 +13,11 @@
     send_heroes_for_work: 5
     
     # [en_US] Time interval to update heroes position in the map,
-    # Default value (in minutes): 3
+    # Default value (in minutes): 5
     #
     # [pt_BR] Intervalo de tempo para atualizar a posição dos heróis no mapa
-    # Valor padrão (em minutos): 3
-    refresh_heroes_positions: 3
+    # Valor padrão (em minutos): 5
+    refresh_heroes_positions: 5
     
     # [en_US] Time interval to check for new maps
     # Default value (in minutes): 2
@@ -34,11 +34,11 @@
     check_for_captcha: 0.5
 
     # [en_US] Time interval to check for login request
-    # Default value (in minutes): 0.1
+    # Default value (in minutes): 1
     #
     # [pt_BR] Intervalo de tempo para verificar se existe solicitação de login
-    # Valor padrão (em minutos): 0.1
-    check_for_login: 0.1
+    # Valor padrão (em minutos): 1
+    check_for_login: 1
 
     # [en_US] Time interval between moviments
     # Default value (in seconds): 0.1

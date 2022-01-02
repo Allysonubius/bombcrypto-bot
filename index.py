@@ -318,6 +318,7 @@ def refreshHeroes():
         scroll()
         time.sleep(2)
     logger('✨🐱‍🏍🐱‍🏍✨ {} heróis enviados para o trabalho'.format(hero_clicks))
+    
     goToGame()
 
 def main():

@@ -58,11 +58,11 @@
 
   # [pt_BR]
   # Valor padrão: 60
-  scroll_size: 60
+  scroll_size: 120
 
   # [pt_BR]
   # Valor padrão: 3
-  scroll_attemps: 1
+  scroll_attemps: 3
 
   # [pt_BR]
   # Valor padrão: true

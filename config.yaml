@@ -7,8 +7,8 @@
     send_heroes_for_work: 10
 
     # [pt_BR] Intervalo de tempo para atualizar a posição dos heróis no mapa
-    # Valor padrão (em minutos): 7.5
-    refresh_heroes_positions: 7.5
+    # Valor padrão (em minutos): 5
+    refresh_heroes_positions: 5
     
     # [pt_BR] Intervalo de tempo para verificar por novos mapas
     # Valor padrão (em segundos): 2

@@ -35,7 +35,7 @@ def logger(message, progress_indicator = False, color = 'default'):
     if progress_indicator:
         if not last_log_is_progress:
             last_log_is_progress = True
-            formatted_message = color_formatted + "[{}] => {}".format(formatted_datetime, '⬆️ Processing last action..')
+            formatted_message = color_formatted + "[{}] => {}".format(formatted_datetime, '⬆️ Processando a próxima ação..')
             sys.stdout.write(formatted_message)
             sys.stdout.flush()
         else:
@@ -58,7 +58,7 @@ def logger(message, progress_indicator = False, color = 'default'):
     return True
 
 def loggerMapClicked():
-  logger('🗺️ New Map button clicked!')
+  logger('🗺️ Botão Novo mapa clicado!')
   logger_file = open("./logs/new-map.log", "a", encoding='utf-8')
   logger_file.write(dateFormatted() + '\n')
   logger_file.close()

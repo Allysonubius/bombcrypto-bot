@@ -215,27 +215,27 @@ def goToHeroes():
 
 def goToGame():
     clickBtn(images['x'])
-    clickBtn(images['x'])
     clickBtn(images['treasure-hunt-icon'])
 
 def refreshHeroesPositions():
     logger('⏱ Refrescando as posições dos heróis')
     clickBtn(images['go-back-arrow'])
     clickBtn(images['treasure-hunt-icon'])
-    clickBtn(images['treasure-hunt-icon'])
 
 def login():
     global login_attempts
     logger('⏳⌛⏳ Verificando se o jogo foi desconectado')
 
-    if login_attempts > 3:
-        logger('😣😣 Muitas tentativas de login, atualizando')
-        login_attempts = 0
-        pyautogui.hotkey('ctrl','f5')
-        return
-
     if clickBtn(images['connect-wallet'], timeout = 10):
-        logger('🥱🥱😪 Botão de conexão da carteira detectado, entrando!')
+        logger('🥱🥱😪 Conectar ao jogo, entrando!')
+        login_attempts = login_attempts + 1
+        if login_attempts > 3:
+            logger('😣😣 Muitas tentativas de login, atualizando')
+            login_attempts = 0
+            pyautogui.hotkey('ctrl','f5')
+
+    if clickBtn(images['connect-wallet-login'], timeout = 10):
+        logger('🥱🥱😪 Conectando na metamask, entrando!')
         login_attempts = login_attempts + 1
 
     if clickBtn(images['select-wallet-2'], timeout=8):
@@ -243,12 +243,6 @@ def login():
         if clickBtn(images['treasure-hunt-icon'], timeout = 15):
             login_attempts = 0
         return
-
-    if not clickBtn(images['select-wallet-1-no-hover'], ):
-        if clickBtn(images['select-wallet-1-hover'], threshold = ct['select_wallet_buttons'] ):
-            pass
-    else:
-        pass
 
     if clickBtn(images['select-wallet-2'], timeout = 20):
         login_attempts = login_attempts + 1
@@ -355,27 +349,27 @@ def main():
     while True:
         now = time.time()
 
-        if now - last["check_for_captcha"] > addRandomness(t['check_for_captcha'] * 60):
-            last["check_for_captcha"] = now
-
-        if now - last["heroes"] > addRandomness(t['send_heroes_for_work'] * 60):
-            last["heroes"] = now
-            refreshHeroes()
-
         if now - last["login"] > addRandomness(t['check_for_login'] * 60):
             sys.stdout.flush()
             last["login"] = now
             login()
 
-        if now - last["new_map"] > t['check_for_new_map_button']:
-            last["new_map"] = now
+            if now - last["check_for_captcha"] > addRandomness(t['check_for_captcha'] * 60):
+                last["check_for_captcha"] = now
 
-            if clickBtn(images['new-map']):
-                loggerMapClicked()
+            if now - last["heroes"] > addRandomness(t['send_heroes_for_work'] * 60):
+                last["heroes"] = now
+                refreshHeroes()
 
-        if now - last["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
-            last["refresh_heroes"] = now
-            refreshHeroesPositions()
+            if now - last["new_map"] > t['check_for_new_map_button']:
+                last["new_map"] = now
+
+                if clickBtn(images['new-map']):
+                    loggerMapClicked()
+
+            if now - last["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
+                last["refresh_heroes"] = now
+                refreshHeroesPositions()
 
         logger(None, progress_indicator=True)
 

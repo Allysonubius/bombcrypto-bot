@@ -71,26 +71,28 @@ def show(rectangles, img = None):
     cv2.imshow('img',img)
     cv2.waitKey(0)
 
-def clickBtn(img, timeout=3, threshold = ct['default']):
-
+def clickBtn(img,name=None, timeout=3, threshold = ct['default']):
     logger(None, progress_indicator=True)
+    if not name is None:
+        pass
     start = time.time()
-    has_timed_out = False
-    while(not has_timed_out):
+    while(True):
         matches = positions(img, threshold=threshold)
-
         if(len(matches)==0):
-            has_timed_out = time.time()-start > timeout
+            hast_timed_out = time.time()-start > timeout
+            if(hast_timed_out):
+                if not name is None:
+                    pass
+                return False
             continue
 
         x,y,w,h = matches[0]
         pos_click_x = x+w/2
         pos_click_y = y+h/2
+        # mudar moveto pra w randomness
         moveToWithRandomness(pos_click_x,pos_click_y,1)
         pyautogui.click()
         return True
-
-    return False
 
 def printSreen():
     with mss.mss() as sct:
